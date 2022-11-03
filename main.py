@@ -9,7 +9,7 @@ from discord.ext import tasks
 from server import keep_alive
 
 my_secret = os.environ['TOKEN']
-CHANNEL_ID = 1035060199305793567  #チャンネルID
+CHANNEL_ID = os.environ['CHANNEL']  #チャンネルID
 
 discord_intents = discord.Intents.all()
 discord_intents.typing = False
@@ -59,10 +59,13 @@ async def now(ctx):
     '''\
 ```asciidoc
 %s 〜 %s
+ 
 [ナワバリ]
 %s
+ 
 [バンカラ(チャレンジ)(%s)]
 %s
+ 
 [バンカラ(オープン)(%s)]
 %s
 ```\
@@ -104,10 +107,13 @@ async def next(ctx):
     '''\
 ```asciidoc
 %s 〜 %s
+ 
 [ナワバリ]
 %s
+ 
 [バンカラ(チャレンジ)(%s)]
 %s
+ 
 [バンカラ(オープン)(%s)]
 %s
 ```\
@@ -124,7 +130,8 @@ async def loop():
   #print(now)
   if now == '07:00' or now == '07:00' or now == '09:00' or now == '11:00' or now == '13:00' or now == '15:00' or now == '17:00' or now == '19:00' or now == '21:00' or now == '23:00' or now == '01:00' or now == '03:00' or now == '05:00':
     await bot.wait_until_ready()
-    channel = bot.get_channel(CHANNEL_ID)
+    print(CHANNEL_ID)
+    channel = bot.get_channel(int(CHANNEL_ID))
     apiurl = 'https://spla3.yuu26.com/api/schedule/'
     r = requests.get(apiurl)
     result = r.json()["result"]
@@ -155,10 +162,13 @@ async def loop():
       '''\
 ```asciidoc
 %s 〜 %s
+ 
 [ナワバリ]
 %s
+ 
 [バンカラ(チャレンジ)(%s)]
 %s
+ 
 [バンカラ(オープン)(%s)]
 %s
 ```\
