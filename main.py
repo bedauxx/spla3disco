@@ -167,30 +167,58 @@ async def loop():
     r = requests.get(apiurl)
     result = r.json()["result"]
 
-    print(result["bankara_open"][0]["stages"][0]["name"],
-          result["bankara_open"][0]["stages"][1]["name"])
+    #フェス開催時
+    if result["bankara_open"][0]["is_fest"] == True:
 
-    str_time_start = result["regular"][0]["start_time"][11:]
-    str_time_end = result["regular"][0]["end_time"][11:]
+      str_time_start = result["fest"][0]["start_time"][11:]
+      str_time_end = result["fest"][0]["end_time"][11:]
 
-    str_bankara_challenge_rule = result["bankara_challenge"][0]["rule"]["name"]
-    str_bankara_open_rule = result["bankara_open"][0]["rule"]["name"]
+      if result["fest"][0]["is_tricolor"] == True:
+        str_tricolor = result["fest"][0]["tricolor_stage"][0]["name"]
+      else:
+        str_tricolor = result["fest"][0]["tricolor_stage"][0]["name"]
 
-    str_regular_a = result["regular"][0]["stages"][0]["name"]
-    str_bankara_challenge_a = result["bankara_challenge"][0]["stages"][0][
-      "name"]
-    str_bankara_open_a = result["bankara_open"][0]["stages"][0]["name"]
-    str_regular_b = result["regular"][0]["stages"][1]["name"]
-    str_bankara_challenge_b = result["bankara_challenge"][0]["stages"][1][
-      "name"]
-    str_bankara_open_b = result["bankara_open"][0]["stages"][1]["name"]
+      str_fest_a = result["fest"][0]["stages"][0]["name"]
+      str_fest_b = result["fest"][0]["stages"][1]["name"]
+      str_fest = str_fest_a + "," + str_fest_b + "," + str_tricolor
 
-    str_regular = str_regular_a + "," + str_regular_b
-    str_bankara_challenge = str_bankara_challenge_a + "," + str_bankara_challenge_b
-    str_bankara_open = str_bankara_open_a + "," + str_bankara_open_b
+      if ctx.author == bot.user:
+        return
 
-    await channel.send(
-      '''\
+      await ctx.send('''\
+```asciidoc
+%s 〜 %s
+
+[フェス]
+%s
+```\
+    ''' % (str_time_start, str_time_end, str_fest))
+
+    #通常時
+    else:
+
+      str_time_start = result["regular"][0]["start_time"][11:]
+      str_time_end = result["regular"][0]["end_time"][11:]
+
+      str_bankara_challenge_rule = result["bankara_challenge"][0]["rule"][
+        "name"]
+      str_bankara_open_rule = result["bankara_open"][0]["rule"]["name"]
+
+      str_regular_a = result["regular"][0]["stages"][0]["name"]
+      str_bankara_challenge_a = result["bankara_challenge"][0]["stages"][0][
+        "name"]
+      str_bankara_open_a = result["bankara_open"][0]["stages"][0]["name"]
+      str_regular_b = result["regular"][0]["stages"][1]["name"]
+      str_bankara_challenge_b = result["bankara_challenge"][0]["stages"][1][
+        "name"]
+      str_bankara_open_b = result["bankara_open"][0]["stages"][1]["name"]
+
+      str_regular = str_regular_a + "," + str_regular_b
+      str_bankara_challenge = str_bankara_challenge_a + "," + str_bankara_challenge_b
+      str_bankara_open = str_bankara_open_a + "," + str_bankara_open_b
+
+      await channel.send(
+        '''\
 ```asciidoc
 %s 〜 %s
  
@@ -204,8 +232,8 @@ async def loop():
 %s
 ```\
         ''' %
-      (str_time_start, str_time_end, str_regular, str_bankara_challenge_rule,
-       str_bankara_challenge, str_bankara_open_rule, str_bankara_open))
+        (str_time_start, str_time_end, str_regular, str_bankara_challenge_rule,
+         str_bankara_challenge, str_bankara_open_rule, str_bankara_open))
 
 
 @bot.listen()
