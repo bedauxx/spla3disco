@@ -41,9 +41,9 @@ async def now(ctx):
     str_time_end = result["fest"][0]["end_time"][11:]
 
     if result["fest"][0]["is_tricolor"] == True:
-      str_tricolor = result["fest"][0]["tricolor_stage"][0]["name"]
+      str_tricolor = result["fest"][0]["tricolor_stage"]["name"]
     else:
-      str_tricolor = result["fest"][0]["tricolor_stage"][0]["name"]
+      str_tricolor = " "
 
     str_fest_a = result["fest"][0]["stages"][0]["name"]
     str_fest_b = result["fest"][0]["stages"][1]["name"]
@@ -174,18 +174,16 @@ async def loop():
       str_time_end = result["fest"][0]["end_time"][11:]
 
       if result["fest"][0]["is_tricolor"] == True:
-        str_tricolor = result["fest"][0]["tricolor_stage"][0]["name"]
+        str_tricolor = result["fest"][0]["tricolor_stage"]["name"]
       else:
-        str_tricolor = result["fest"][0]["tricolor_stage"][0]["name"]
+        str_tricolor = " "
 
       str_fest_a = result["fest"][0]["stages"][0]["name"]
       str_fest_b = result["fest"][0]["stages"][1]["name"]
       str_fest = str_fest_a + "," + str_fest_b + "," + str_tricolor
 
-      if ctx.author == bot.user:
-        return
-
-      await ctx.send('''\
+      await channel.send(
+        '''\
 ```asciidoc
 %s 〜 %s
 
